@@ -2,7 +2,7 @@ import grammar
 
 if __name__ == "__main__":
 	import sys
-	variables = [ "a", "b", "c", ]
+	variables = [ "a", "t", "s.level", ]
 	tree = grammar.Parse(sys.argv[1], variables)
 	print "------- dump ------"
 	tree.Dump("")

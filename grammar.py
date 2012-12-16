@@ -15,15 +15,11 @@ t_TIMES = r'\*'
 t_DIVIDE = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_VARIABLE = r'[a-zA-Z_][a-zA-Z0-9_]*'
+t_VARIABLE = r'[a-zA-Z_][a-zA-Z0-9_.]*'
 
 def t_NUMBER(t):
-	r'\d+'
-	try:
-		t.value = int(t.value)
-	except ValueError:
-		print("Integer value too large %d", t.value)
-		t.value = 0
+	r"""([0-9]*\.[0-9]+)|(\d+)"""
+	t.value = float(t.value)
 	return t
 
 def t_error(t):

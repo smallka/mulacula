@@ -4,12 +4,16 @@ OP_MINUS = 3
 OP_TIMES = 4
 OP_DIVIDE = 5
 
+RPN_OP = 1
+RPN_VALUE = 2
+RPN_VARIABLE = 3
+
 class Node(object):
 	def __init__(self):
 		pass
 
 	def Rpn(self, lst):
-		lst.append(self)
+		raise NotImplementedError("Subclasses should implement this!")
 
 	def __repr__(self):
 		raise NotImplementedError("Subclasses should implement this!")
@@ -30,13 +34,19 @@ class ValueNode(Node):
 		super(ValueNode, self).__init__()
 		self.value = value
 
+	def Rpn(self, lst):
+		lst.append([ RPN_VALUE, self.value, ])
+
 	def __repr__(self):
-		return "[value] %d" % self.value
+		return "[value] %f" % self.value
 
 class VariableNode(Node):
 	def __init__(self, index):
 		super(VariableNode, self).__init__()
 		self.index = index
+
+	def Rpn(self, lst):
+		lst.append([ RPN_VARIABLE, self.index, ])
 
 	def __repr__(self):
 		return "[variable] %u" % self.index
@@ -49,7 +59,7 @@ class UnaryOpNode(Node):
 
 	def Rpn(self, lst):
 		self.value.Rpn(lst)
-		super(UnaryOpNode, self).Rpn(lst)
+		lst.append([ RPN_OP, self.op, ])
 
 	def __repr__(self):
 		return "[op] %u" % self.op
@@ -68,7 +78,7 @@ class BinaryOpNode(Node):
 	def Rpn(self, lst):
 		self.left.Rpn(lst)
 		self.right.Rpn(lst)
-		super(BinaryOpNode, self).Rpn(lst)
+		lst.append([ RPN_OP, self.op, ])
 
 	def __repr__(self):
 		return "[op] %u" % self.op
