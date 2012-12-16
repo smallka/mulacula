@@ -39,32 +39,32 @@ var2index = {}
 precedence = (
 	('left','PLUS','MINUS'),
 	('left','TIMES','DIVIDE'),
-	('right','UMINUS'),
+	('right','NEGATIVE'),
 	)
 
 
 def p_expression_plus(t):
 	'''expression : expression PLUS expression'''
-	t[0] = node.BinaryOpNode(node.OP_PLUS, t[1], t[3])
+	t[0] = node.BinaryOpNode(node.BINARY_OP_PLUS, t[1], t[3])
 
 def p_expression_minus(t):
 	'''expression : expression MINUS expression'''
-	t[0] = node.BinaryOpNode(node.OP_MINUS, t[1], t[3])
+	t[0] = node.BinaryOpNode(node.BINARY_OP_MINUS, t[1], t[3])
 
 def p_expression_times(t):
 	'''expression : expression TIMES expression'''
-	t[0] = node.BinaryOpNode(node.OP_TIMES, t[1], t[3])
+	t[0] = node.BinaryOpNode(node.BINARY_OP_TIMES, t[1], t[3])
 
 def p_expression_divide(t):
 	'''expression : expression DIVIDE expression'''
-	t[0] = node.BinaryOpNode(node.OP_DIVIDE, t[1], t[3])
+	t[0] = node.BinaryOpNode(node.BINARY_OP_DIVIDE, t[1], t[3])
 
 def p_expression_uminus(t):
-	'expression : MINUS expression %prec UMINUS'
+	'expression : MINUS expression %prec NEGATIVE'
 	if t[2].node_type == node.NODE_VALUE:
 		t[0] = node.ValueNode(-t[2].value)
 	else:
-		t[0] = node.UnaryOpNode(node.OP_UMINUS, t[2])
+		t[0] = node.UnaryOpNode(node.UNARY_OP_NEGATIVE, t[2])
 
 def p_expression_group(t):
 	'expression : LPAREN expression RPAREN'

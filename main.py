@@ -8,7 +8,7 @@ if __name__ == "__main__":
 	tree.Dump("")
 	print "------- rpn ------"
 	lst = []
-	tree.Rpn(lst)
+	tree.GenRPN(lst)
 	for node in lst:
 		print node
 
