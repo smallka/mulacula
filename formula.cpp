@@ -2,17 +2,24 @@
 
 #include <stack>
 #include <vector>
+
+#ifdef SINGLE_RUN
 #include "stdio.h"
-#include "share_const.h"
+#define ERRORF(fmt, ...)	printf(fmt, __VA_ARGS__); printf("\n")
+#define ERRORS(fmt)	printf(fmt); printf("\n")
+#else
+#include "log.h"
+#endif
 
 #define SAFE_TOP(var) if (stk.empty()) \
 	{ \
-		printf("empty stack for type %u op %u\n", elem->type, elem->u.op); \
+		ERRORF("empty stack for type %u op %u", elem->type, elem->u.op); \
 		stk.push(0.0f); \
 	} \
 	var = stk.top();
 
-float CalcRPN(const std::vector<float>& vars, const std::vector<RPNElem>& elems)
+
+float CalcRPN(const std::vector<RPNElem>& elems, const std::vector<float>& vars)
 {
 	std::stack<float> stk;
 	float left, right;
@@ -29,7 +36,7 @@ float CalcRPN(const std::vector<float>& vars, const std::vector<RPNElem>& elems)
 		{
 			if (elem->u.index >= vars.size())
 			{
-				printf("index out of range: %u\n",
+				ERRORF("index out of range: %u",
 						elem->u.index);
 				stk.push(0.0f);
 			}
@@ -57,7 +64,7 @@ float CalcRPN(const std::vector<float>& vars, const std::vector<RPNElem>& elems)
 				case BINARY_OP_DIVIDE:
 					if (right == 0.0f)
 					{
-						printf("division by 0\n");
+						ERRORS("division by 0");
 					}
 					else
 					{
@@ -65,7 +72,7 @@ float CalcRPN(const std::vector<float>& vars, const std::vector<RPNElem>& elems)
 					}
 					break;
 				default:
-					printf("unknown binary op %u\n",
+					ERRORF("unknown binary op %u",
 							elem->u.op);
 			}
 		}
@@ -77,7 +84,7 @@ float CalcRPN(const std::vector<float>& vars, const std::vector<RPNElem>& elems)
 				case UNARY_OP_NEGATIVE:
 					stk.top() = -left;
 				default:
-					printf("unknown binary op %u\n",
+					ERRORF("unknown binary op %u",
 							elem->u.op);
 			}
 		}
@@ -85,34 +92,9 @@ float CalcRPN(const std::vector<float>& vars, const std::vector<RPNElem>& elems)
 
 	if (stk.size() != 1)
 	{
-		printf("wrong stack size %lu\n", stk.size());
+		ERRORF("wrong stack size %lu", stk.size());
 		return 0.0f;
 	}
 
 	return stk.top();
-}
-
-int main()
-{
-	std::vector<float> vars(1);	
-
-	vars[0] = 2;
-
-	std::vector<RPNElem> elems(5);
-
-	elems[0].type = RPN_VALUE;
-	elems[0].u.value = 3;
-	elems[1].type = RPN_VALUE;
-	elems[1].u.value = 2.5;
-	elems[2].type = RPN_VARIABLE;
-	elems[2].u.index = 0;
-	elems[3].type = RPN_BINARY_OP;
-	elems[3].u.op = BINARY_OP_TIMES;
-	elems[4].type = RPN_BINARY_OP;
-	elems[4].u.op = BINARY_OP_PLUS;
-
-	float ret = CalcRPN(vars, elems);
-	printf("%f\n", ret);
-
-	return 0;
 }
