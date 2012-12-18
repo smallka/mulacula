@@ -37,6 +37,6 @@ typedef struct RPNElem_t
 	} u;
 } RPNElem;
 
-float CalcRPN(const std::vector<RPNElem>& elems, const std::vector<float>& vars);
+float CalcRPN2(RPNElem elem_list[], int elem_count, float arg0, float arg1);
 
 #endif  // __FORMULA_H__

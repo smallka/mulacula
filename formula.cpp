@@ -1,65 +1,70 @@
 #include "formula.h"
-
-#include <stack>
 #include <vector>
-
-#ifdef SINGLE_RUN
 #include "stdio.h"
+
 #define ERRORF(fmt, ...)	printf(fmt, __VA_ARGS__); printf("\n")
 #define ERRORS(fmt)	printf(fmt); printf("\n")
-#else
-#include "log.h"
-#endif
 
-#define SAFE_TOP(var) if (stk.empty()) \
+#define MAX_STACK 1000
+
+#define SAFE_PUSH(var) if (stk_idx >= MAX_STACK) \
+	{ \
+		ERRORS("stack overflow"); \
+		return 0.0f; \
+	} \
+	stk[++stk_idx] = var
+
+
+#define SAFE_TOP(var) if (stk_idx == -1) \
 	{ \
 		ERRORF("empty stack for type %u op %u", elem->type, elem->u.op); \
-		stk.push(0.0f); \
+		stk[++stk_idx] = 0.0f; \
 	} \
-	var = stk.top();
+	var = stk[stk_idx];
 
 
-float CalcRPN(const std::vector<RPNElem>& elems, const std::vector<float>& vars)
+float CalcRPN2(RPNElem elem_list[], int elem_count, float arg0, float arg1)
 {
-	std::stack<float> stk;
+	static float stk[MAX_STACK+1];
+	int stk_idx = -1;
 	float left, right;
 
-	for (std::vector<RPNElem>::const_iterator elem = elems.begin();
-			elem != elems.end();
-			elem++)
+	for (RPNElem *elem = elem_list; elem != elem_list + elem_count; elem++)
 	{
 		if (elem->type == RPN_VALUE)
 		{
-			stk.push(elem->u.value);
+			SAFE_PUSH(elem->u.value);
 		}
 		else if (elem->type == RPN_VARIABLE)
 		{
-			if (elem->u.index >= vars.size())
+			switch (elem->u.index)
 			{
-				ERRORF("index out of range: %u",
-						elem->u.index);
-				stk.push(0.0f);
-			}
-			else
-			{
-				stk.push(vars[elem->u.index]);
+				case 0:
+					SAFE_PUSH(arg0);
+					break;
+				case 1:
+					SAFE_PUSH(arg1);
+					break;
+				default:
+					ERRORF("index out of range: %u", elem->u.index);
+					SAFE_PUSH(0.0f);
 			}
 		}
 		else if (elem->type == RPN_BINARY_OP)
 		{
-			SAFE_TOP(left);
-			stk.pop();
 			SAFE_TOP(right);
+			stk_idx--;	// valid index guaranteed by SAFE_TOP
+			SAFE_TOP(left);
 			switch (elem->u.op)
 			{
 				case BINARY_OP_PLUS:
-					stk.top() = left + right;
+					stk[stk_idx] = left + right;
 					break;
 				case BINARY_OP_MINUS:
-					stk.top() = left - right;
+					stk[stk_idx] = left - right;
 					break;
 				case BINARY_OP_TIMES:
-					stk.top() = left * right;
+					stk[stk_idx] = left * right;
 					break;
 				case BINARY_OP_DIVIDE:
 					if (right == 0.0f)
@@ -68,12 +73,11 @@ float CalcRPN(const std::vector<RPNElem>& elems, const std::vector<float>& vars)
 					}
 					else
 					{
-						stk.top() = left / right;
+						stk[stk_idx] = left / right;
 					}
 					break;
 				default:
-					ERRORF("unknown binary op %u",
-							elem->u.op);
+					ERRORF("unknown binary op %u", elem->u.op);
 			}
 		}
 		else  // RPN_UNARY_OP
@@ -82,19 +86,18 @@ float CalcRPN(const std::vector<RPNElem>& elems, const std::vector<float>& vars)
 			switch (elem->u.op)
 			{
 				case UNARY_OP_NEGATIVE:
-					stk.top() = -left;
+					stk[stk_idx] = -left;
 				default:
-					ERRORF("unknown binary op %u",
-							elem->u.op);
+					ERRORF("unknown unary op %u", elem->u.op);
 			}
 		}
 	}
 
-	if (stk.size() != 1)
+	if (stk_idx != 0)
 	{
-		ERRORF("wrong stack size %lu", stk.size());
+		ERRORF("wrong stack index %d", stk_idx);
 		return 0.0f;
 	}
 
-	return stk.top();
+	return stk[0];
 }
