@@ -1,5 +1,5 @@
 CC = g++
-CPPFLAGS = -g
+CPPFLAGS = -g -O2
 
 all:	clean formula.o
 	$(CC) main.cpp formula.o -lrt -o main
