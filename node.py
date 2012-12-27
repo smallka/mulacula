@@ -9,6 +9,7 @@ RPN_VALUE = 1
 RPN_VARIABLE = 2
 RPN_UNARY_OP = 3
 RPN_BINARY_OP = 4
+RPN_ATTR = 5
 
 class Node(object):
 	def __init__(self):
@@ -90,3 +91,13 @@ class BinaryOpNode(Node):
 		self.left.Dump("  " + indent)
 		self.right.Dump("  " + indent)
 
+class AttrNode(Node):
+	def __init__(self, index):
+		super(AttrNode, self).__init__()
+		self.index = index
+
+	def GenRPN(self, lst):
+		lst.append([ RPN_ATTR, self.index, ])
+
+	def __repr__(self):
+		return "[attr] %u" % self.index

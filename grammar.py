@@ -5,6 +5,7 @@ tokens = (
 	'VARIABLE','NUMBER',
 	'PLUS','MINUS','TIMES','DIVIDE',
 	'LPAREN','RPAREN',
+	'ATTR',
 )
 
 # Tokens
@@ -15,7 +16,8 @@ t_TIMES = r'\*'
 t_DIVIDE = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
-t_VARIABLE = r'[a-zA-Z_][a-zA-Z0-9_.]*'
+t_VARIABLE = r'[a-zA-Z][a-zA-Z0-9_]*'
+t_ATTR = r'[a-zA-Z].[a-zA-Z][a-zA-Z0-9_]*'
 
 def t_NUMBER(t):
 	r"""([0-9]*\.[0-9]+)|(\d+)"""
@@ -35,6 +37,7 @@ lex.lex()
 import node
 
 var2index = {}
+attr2index = {}
 
 precedence = (
 	('left','PLUS','MINUS'),
@@ -84,6 +87,16 @@ def p_expression_variable(t):
 	else:
 		t[0] = node.VariableNode(index)
 
+def p_expression_attr(t):
+	'expression : ATTR'
+	index = attr2index.get(t[1])
+	if index is None:
+		msg = "Undefined attr '%s'" % t[1]
+		print(msg)
+		t[0] = node.ErrorNode(msg)
+	else:
+		t[0] = node.AttrNode(index)
+
 def p_error(t):
 	print("Syntax error at '%s'" % t.value)
 
@@ -92,11 +105,14 @@ yacc.yacc()
 
 ########
 
-def Parse(formula, variables):
+def Parse(formula, variables, attrs):
 	global var2index
 	var2index.clear()
 	for i in xrange(len(variables)):
 		var2index[variables[i]] = i
+
+	global attr2index
+	attr2index = attrs
 
 	return yacc.parse(formula)
 

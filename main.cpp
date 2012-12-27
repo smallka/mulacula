@@ -44,7 +44,7 @@ int main()
 	}
 
 	long start;
-	int val;
+	float val;
 
 	float a = 2;
 	float b = 4;
@@ -54,23 +54,23 @@ int main()
 	{
 		val += 3 + (a * 2.5 - b);
 	}
-	printf("raw %d %ld\n", val, get_mono_time() - start);
+	printf("c %f %ld\n", val, get_mono_time() - start);
 
 	val = 0;
 	start = get_mono_time();
 	for (int i = 0; i < 1000000; i++)
 	{
-		val += CalcRPN2(elems, 7, 2, 4);
+		val += CalcRPN2RAW(elems, 7, 2, 4);
 	}
-	printf("hand %d %ld\n", val, get_mono_time() - start);
+	printf("raw %f %ld\n", val, get_mono_time() - start);
 
 	val = 0;
 	start = get_mono_time();
 	for (int i = 0; i < 1000000; i++)
 	{
-		val += CalcRPN2VECTOR(&elem_list, 2, 4);
+		val += CalcRPN2(&elem_list, 2, 4);
 	}
-	printf("vector %d %ld\n", val, get_mono_time() - start);
+	printf("vector %f %ld\n", val, get_mono_time() - start);
 
 	val = 0;
 	start = get_mono_time();
@@ -78,7 +78,51 @@ int main()
 	{
 		val += CalcRPN2STACK(&elem_list, 2, 4);
 	}
-	printf("stack %d %ld\n", val, get_mono_time() - start);
+	printf("stack %f %ld\n", val, get_mono_time() - start);
+
+	val = 0;
+	std::vector<RPNElem> elem_list_attr;
+	RPNElem elem_attr;
+	elem_attr.type = 1;
+	elem_attr.u.value = 2.0;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 5;
+	elem_attr.u.index = 1;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 2;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 2;
+	elem_attr.u.index = 0;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 5;
+	elem_attr.u.index = 2;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 1;
+	elem_attr.u.value = 4.0;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 4;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 3;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 1;
+	elem_list_attr.push_back(elem_attr);
+	// 2.0-p.level+a*(p.attack/4)
+
+	Player player;
+	player.level = 10;
+	player.attack = 9;
+	player.defence = 4;
+
+	start = get_mono_time();
+	for (int i = 0; i < 1000000; i++)
+	{
+		val += CalcRPN2Player(&elem_list_attr, &player, 2, 4);
+	}
+	printf("player %f %ld\n", val, get_mono_time() - start);
 
 	return 0;
 }

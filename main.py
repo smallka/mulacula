@@ -2,8 +2,13 @@ import grammar
 
 if __name__ == "__main__":
 	import sys
-	variables = [ "a", "t", "s.level", ]
-	tree = grammar.Parse(sys.argv[1], variables)
+	attrs = {
+		"p.level" : 1,
+		"p.attack" : 2,
+		"p.defence" : 3,
+	}
+	variables = [ "a", "b", ]
+	tree = grammar.Parse(sys.argv[1], variables, attrs)
 	print "------- dump ------"
 	tree.Dump("")
 	print "------- rpn ------"

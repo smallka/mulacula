@@ -5,9 +5,9 @@ _tabversion = '3.2'
 
 _lr_method = 'LALR'
 
-_lr_signature = '&\xb0{\xed\x8d4\x008\xc1\x9e\xa0\x1a\xf6\x9d\x8du'
+_lr_signature = '`RFo%u.\x08hk\xff\xa8\x98.\xb52'
     
-_lr_action_items = {'RPAREN':([1,3,6,11,12,13,14,15,16,],[-7,-8,12,-5,-6,-1,-4,-2,-3,]),'DIVIDE':([1,3,4,6,11,12,13,14,15,16,],[-7,-8,8,8,-5,-6,8,-4,8,-3,]),'NUMBER':([0,2,5,7,8,9,10,],[1,1,1,1,1,1,1,]),'TIMES':([1,3,4,6,11,12,13,14,15,16,],[-7,-8,10,10,-5,-6,10,-4,10,-3,]),'PLUS':([1,3,4,6,11,12,13,14,15,16,],[-7,-8,7,7,-5,-6,-1,-4,-2,-3,]),'LPAREN':([0,2,5,7,8,9,10,],[2,2,2,2,2,2,2,]),'VARIABLE':([0,2,5,7,8,9,10,],[3,3,3,3,3,3,3,]),'MINUS':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,],[5,-7,5,-8,9,5,9,5,5,5,5,-5,-6,-1,-4,-2,-3,]),'$end':([1,3,4,11,12,13,14,15,16,],[-7,-8,0,-5,-6,-1,-4,-2,-3,]),}
+_lr_action_items = {'RPAREN':([1,3,6,7,12,13,14,15,16,17,],[-7,-8,-9,13,-5,-6,-1,-4,-2,-3,]),'ATTR':([0,2,5,8,9,10,11,],[6,6,6,6,6,6,6,]),'NUMBER':([0,2,5,8,9,10,11,],[1,1,1,1,1,1,1,]),'TIMES':([1,3,4,6,7,12,13,14,15,16,17,],[-7,-8,11,-9,11,-5,-6,11,-4,11,-3,]),'PLUS':([1,3,4,6,7,12,13,14,15,16,17,],[-7,-8,8,-9,8,-5,-6,-1,-4,-2,-3,]),'LPAREN':([0,2,5,8,9,10,11,],[2,2,2,2,2,2,2,]),'VARIABLE':([0,2,5,8,9,10,11,],[3,3,3,3,3,3,3,]),'$end':([1,3,4,6,12,13,14,15,16,17,],[-7,-8,0,-9,-5,-6,-1,-4,-2,-3,]),'MINUS':([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,],[5,-7,5,-8,10,5,-9,10,5,5,5,5,-5,-6,-1,-4,-2,-3,]),'DIVIDE':([1,3,4,6,7,12,13,14,15,16,17,],[-7,-8,9,-9,9,-5,-6,9,-4,9,-3,]),}
 
 _lr_action = { }
 for _k, _v in _lr_action_items.items():
@@ -16,7 +16,7 @@ for _k, _v in _lr_action_items.items():
       _lr_action[_x][_k] = _y
 del _lr_action_items
 
-_lr_goto_items = {'expression':([0,2,5,7,8,9,10,],[4,6,11,13,14,15,16,]),}
+_lr_goto_items = {'expression':([0,2,5,8,9,10,11,],[4,7,12,14,15,16,17,]),}
 
 _lr_goto = { }
 for _k, _v in _lr_goto_items.items():
@@ -26,12 +26,13 @@ for _k, _v in _lr_goto_items.items():
 del _lr_goto_items
 _lr_productions = [
   ("S' -> expression","S'",1,None,None,None),
-  ('expression -> expression PLUS expression','expression',3,'p_expression_plus','/vagrant/mulacula/grammar.py',47),
-  ('expression -> expression MINUS expression','expression',3,'p_expression_minus','/vagrant/mulacula/grammar.py',51),
-  ('expression -> expression TIMES expression','expression',3,'p_expression_times','/vagrant/mulacula/grammar.py',55),
-  ('expression -> expression DIVIDE expression','expression',3,'p_expression_divide','/vagrant/mulacula/grammar.py',59),
-  ('expression -> MINUS expression','expression',2,'p_expression_uminus','/vagrant/mulacula/grammar.py',63),
-  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','/vagrant/mulacula/grammar.py',70),
-  ('expression -> NUMBER','expression',1,'p_expression_number','/vagrant/mulacula/grammar.py',74),
-  ('expression -> VARIABLE','expression',1,'p_expression_variable','/vagrant/mulacula/grammar.py',78),
+  ('expression -> expression PLUS expression','expression',3,'p_expression_plus','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',50),
+  ('expression -> expression MINUS expression','expression',3,'p_expression_minus','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',54),
+  ('expression -> expression TIMES expression','expression',3,'p_expression_times','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',58),
+  ('expression -> expression DIVIDE expression','expression',3,'p_expression_divide','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',62),
+  ('expression -> MINUS expression','expression',2,'p_expression_uminus','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',66),
+  ('expression -> LPAREN expression RPAREN','expression',3,'p_expression_group','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',73),
+  ('expression -> NUMBER','expression',1,'p_expression_number','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',77),
+  ('expression -> VARIABLE','expression',1,'p_expression_variable','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',81),
+  ('expression -> ATTR','expression',1,'p_expression_attr','/home/chenwei/trunk/tools/gen_code_tools/mulacula/grammar.py',91),
 ]
