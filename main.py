@@ -7,7 +7,7 @@ if __name__ == "__main__":
 		"p.attack" : 2,
 		"p.defence" : 3,
 	}
-	variables = [ "a", "b", ]
+	variables = [ "team_count", "level", ]
 	tree = grammar.Parse(sys.argv[1], variables, attrs)
 	print "------- dump ------"
 	tree.Dump("")

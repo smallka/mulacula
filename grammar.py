@@ -17,12 +17,14 @@ t_DIVIDE = r'/'
 t_LPAREN = r'\('
 t_RPAREN = r'\)'
 t_VARIABLE = r'[a-zA-Z][a-zA-Z0-9_]*'
-t_ATTR = r'[a-zA-Z].[a-zA-Z][a-zA-Z0-9_]*'
+t_ATTR = r'[a-zA-Z]\.[a-zA-Z][a-zA-Z0-9_]*'
 
 def t_NUMBER(t):
 	r"""([0-9]*\.[0-9]+)|(\d+)"""
 	t.value = float(t.value)
 	return t
+
+t_ignore  = ' \t'
 
 def t_error(t):
 	print("Illegal character '%s'" % t.value[0])
