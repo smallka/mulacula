@@ -83,6 +83,7 @@ int main()
 	val = 0;
 	std::vector<RPNElem> elem_list_attr;
 	RPNElem elem_attr;
+	elem_list_attr.clear();
 	elem_attr.type = 1;
 	elem_attr.u.value = 2.0;
 	elem_list_attr.push_back(elem_attr);
@@ -123,6 +124,51 @@ int main()
 		val += CalcRPN2Player(&elem_list_attr, &player, 2, 4);
 	}
 	printf("player %f %ld\n", val, get_mono_time() - start);
+
+	// ------------------------------------------------------
+
+	val = 0;
+	elem_list_attr.clear();
+	elem_attr.type = 1;
+	elem_attr.u.value = 2.0;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 5;
+	elem_attr.u.index = 1;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 2;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 2;
+	elem_attr.u.index = 0;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 5;
+	elem_attr.u.index = 2;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 1;
+	elem_attr.u.value = 4.0;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 4;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 3;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 1;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 1;
+	elem_attr.u.value = 0.1;
+	elem_list_attr.push_back(elem_attr);
+	elem_attr.type = 4;
+	elem_attr.u.op = 6;
+	elem_list_attr.push_back(elem_attr);
+	// max(2.0-p.level+a*(p.attack/4), 0.1)
+
+	player.level = 10;
+	player.attack = 9;
+	player.defence = 4;
+
+	printf("ans %f\n", CalcRPN2Player(&elem_list_attr, &player, 2, 4));
 
 	return 0;
 }

@@ -2,6 +2,7 @@
 #include <vector>
 #include <stack>
 #include "stdio.h"
+#include "math.h"
 
 #define ERRORF(fmt, ...)	printf(fmt, __VA_ARGS__); printf("\n")
 #define ERRORS(fmt)	printf(fmt); printf("\n")
@@ -183,6 +184,15 @@ float CalcRPN2Player(const std::vector<RPNElem> *rpn_list, const Player *player,
 						{
 							stk[stk_idx] = left / right;
 						}
+						break;
+					case BINARY_OP_MIN:
+						stk[stk_idx] = std::min(left, right);
+						break;
+					case BINARY_OP_MAX:
+						stk[stk_idx] = std::max(left, right);
+						break;
+					case BINARY_OP_POW:
+						stk[stk_idx] = pow(left, right);
 						break;
 					default:
 						ERRORF("unknown binary op %u", elem->u.op);

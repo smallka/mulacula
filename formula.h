@@ -15,6 +15,9 @@ enum BINARY_OP_TYPE
 	BINARY_OP_MINUS,
 	BINARY_OP_TIMES,
 	BINARY_OP_DIVIDE,
+	BINARY_OP_MIN,
+	BINARY_OP_MAX,
+	BINARY_OP_POW,
 	BINARY_OP_COUNT,
 };
 
@@ -45,8 +48,6 @@ typedef struct RPNElem_t
 	} u;
 } RPNElem;
 
-float CalcRPN2(const std::vector<RPNElem> *rpn_list, float arg0, float arg1);
-
 typedef struct Player_t
 {
 	int level;
@@ -55,6 +56,7 @@ typedef struct Player_t
 } Player;
 float CalcRPN2Player(const std::vector<RPNElem> *rpn_list, const Player *player, float arg0, float arg1);
 
+float CalcRPN2(const std::vector<RPNElem> *rpn_list, float arg0, float arg1);
 float CalcRPN2RAW(RPNElem rpn_list[], int rpn_count, float arg0, float arg1);
 float CalcRPN2STACK(const std::vector<RPNElem> *rpn_list, float arg0, float arg1);
 
