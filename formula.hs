@@ -5,7 +5,7 @@ data RPNType = RPNValue Float
             | RPNBinaryOp OpType
 
 calcRPN :: [ RPNType ] -> Float
-calcRPN rpns = head $ foldl calcRPN' [] rpns
+calcRPN = head $ foldl calcRPN' []
     where
         calcRPN' stack (RPNValue value) = (value:stack)
         calcRPN' (b:a:rest) (RPNBinaryOp op) = (c:rest)
